@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}
+Booking
+{% endblock %}
+
+{% block content %}
+<body class="text-center">
+<form class="form" method="POST">
+    {% csrf_token %}
+    <img class="mb-4" src="https://1000logos.net/wp-content/uploads/2022/06/Logo-Mitsubishi.png" height="150">
+    <h1 class="h3 mb-3 font-weight-normal">
+        Booking Form for {{appliance.title}}
+    </h1>
+    <br>
+    <label for="inputTimeFrom" class="sr-only">Time From</label>
+    <input type="datetime-local" id="inputTimeFrom" class="form-control" placeholder="Time From" name="timeFrom"  required
+           autofocus>
+    <br>
+    <label for="inputTimeTo" class="sr-only">Time To</label>
+    <input type="datetime-local" id="inputTimeTo" class="form-control" placeholder="Time To" name="timeTo" required>
+    <br>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Book</button>
+</form>
+</body>
+{% endblock %}
