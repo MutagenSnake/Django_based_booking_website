@@ -12,6 +12,7 @@ Equipment
         <th scope="col">Name</th>
         <th scope="col">Image</th>
         <th scope="col">Location</th>
+        <th scope="col">Status</th>
         <th scope="col">Options</th>
     </tr>
     </thead>
@@ -25,15 +26,24 @@ Equipment
             <img alt="No image" style="width:64px" src="{{ item.image_url }}">
         </td>
         <td>{{ item.location }}</td>
+        {% if item.status == 'a' %}
+        <td class="functionalAppliance">Functional</td>
+        {% elif item.status == 'b' %}
+        <td class="brokenAppliance">Under Repair</td>
+        {% else %}
+        <td>Unknown</td>
+        {% endif %}
         <td>
             <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
                     data-bs-target="#Modal-MoreInfo{{ item.pk }}">
                 More info
             </button>
-            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
-                    data-bs-target="#Modal-Book{{ item.pk }}">
-                Book
-            </button>
+            <a href="{% url 'booking' item.id %}">
+                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
+                        onclick="{% url 'booking' item.id %}">
+                    Book
+                </button>
+            </a>
         </td>
     </tr>
     {% endfor %}
