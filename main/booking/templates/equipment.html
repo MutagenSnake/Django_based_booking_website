@@ -5,6 +5,13 @@ Equipment
 {% endblock %}
 
 {% block content %}
+
+<div>
+    <form action="{% url 'search' %}" method="get" class="form-inline my-2 my-md-0">
+    <input name="query" class="form-control" type="text" placeholder="Search">
+    </form>
+</div>
+
 <table class="table table-hover">
     <thead>
     <tr>
@@ -49,4 +56,25 @@ Equipment
     {% endfor %}
     </tbody>
 </table>
+
+<div class="container puslapiai">
+    <nav aria-label="...">
+        {% if items.has_other_pages %}
+            <ul class="pagination pagination-sm justify-content-end">
+                {% for i in items.paginator.page_range %}
+                    {% if items.number == i %}
+                        <li class="page-item active">
+                            <a class="page-link">{{ i }}</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </nav>
+</div>
+
 {% endblock %}

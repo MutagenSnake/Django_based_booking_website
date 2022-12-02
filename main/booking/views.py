@@ -12,6 +12,7 @@ from django.contrib import messages
 import re
 from .functions import form_to_datetime, overlap_checker, past_checker
 from django.core.paginator import Paginator
+from django.db.models import Q
 
 def homepage(request):
     """Homepage view"""
@@ -20,12 +21,10 @@ def homepage(request):
 def equipment(request):
     """ View listing all equipment with search option and redirection to booking"""
     paginator = Paginator(Appliance.objects.all(), 10)
-    items = Appliance.objects.all()
     page_number = request.GET.get('page')
     paged_appliances = paginator.get_page(page_number)
     context = {
-        'items': items,
-        'appliances': paged_appliances
+        'items': paged_appliances,
     }
     return render(request, template_name='equipment.html', context=context)
 
@@ -84,3 +83,11 @@ def booking(request, appliance_id):
 
     if request.method == 'GET':
         return render(request, template_name='bookingpage.html', context=context)
+
+def search(request):
+    query = request.GET.get('query')
+    search_results = Appliance.objects.filter(Q(title__icontains=query) | Q(location__icontains=query))
+    context = {
+        'items': search_results,
+    }
+    return render(request, template_name='equipment.html', context=context)
