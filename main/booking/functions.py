@@ -1,6 +1,6 @@
 import re
 import pytz
-from datetime import datetime
+from datetime import datetime, date
 from collections import namedtuple
 
 def form_to_datetime(date):
@@ -39,3 +39,10 @@ def past_checker(date):
         return True
     else:
         return False
+
+def json_serial(obj):
+    """JSON serializer for objects not serializable by default json code"""
+
+    if isinstance(obj, (datetime, date)):
+        return obj.isoformat()
+    raise TypeError ("Type %s not serializable" % type(obj))

@@ -14,7 +14,8 @@ Booking
     </h1>
     <br>
     <label for="inputTimeFrom" class="sr-only">Time From</label>
-    <input type="datetime-local" id="inputTimeFrom" class="form-control" placeholder="Time From" name="timeFrom"  required
+    <input type="datetime-local" id="inputTimeFrom" class="form-control" placeholder="Time From" name="timeFrom"
+           required
            autofocus>
     <br>
     <label for="inputTimeTo" class="sr-only">Time To</label>
@@ -22,5 +23,20 @@ Booking
     <br>
     <button class="btn btn-lg btn-primary btn-block" type="submit">Book</button>
 </form>
+
+<ul id="bookingList"></ul>
+
+<div id="experimentalList">
+    <table>
+        <tr>
+            <td>Date</td>
+            <td>Time From</td>
+            <td>Time To</td>
+        </tr>
+    </table>
+</div>
 </body>
+
+
+
 {% endblock %}

@@ -1,4 +1,7 @@
 import datetime
+from django.shortcuts import render
+from rest_framework import generics
+from .serializers import BookingSerializer
 from django.shortcuts import render, redirect
 from .models import Appliance, Booking, ApplianceType
 from django.contrib.auth import authenticate, login, logout
@@ -10,9 +13,10 @@ from django.contrib.auth.forms import User
 from django.views.decorators.csrf import csrf_protect
 from django.contrib import messages
 import re
-from .functions import form_to_datetime, overlap_checker, past_checker
+from .functions import form_to_datetime, overlap_checker, past_checker, json_serial
 from django.core.paginator import Paginator
 from django.db.models import Q
+import json
 
 def homepage(request):
     """Homepage view"""
@@ -82,6 +86,16 @@ def booking(request, appliance_id):
             return render(request, template_name='bookingpage.html', context=context)
 
     if request.method == 'GET':
+        all_bookings = appliance.booking_set.all()
+        booking_data = []
+        if all_bookings:
+            for booking in all_bookings:
+                start = booking.day_from
+                end = booking.day_to
+                booking_data += [[start, end]]
+
+        data = json.dumps(booking_data, default=json_serial)
+        context = {'appliance': appliance, 'form': form, 'data': data}
         return render(request, template_name='bookingpage.html', context=context)
 
 def search(request):
@@ -91,3 +105,7 @@ def search(request):
         'items': search_results,
     }
     return render(request, template_name='equipment.html', context=context)
+
+class Bookinglist(generics.ListAPIView):
+    queryset = Booking.objects.all()
+    serializer_class = BookingSerializer
