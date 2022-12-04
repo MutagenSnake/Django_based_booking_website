@@ -5,6 +5,7 @@ Booking
 {% endblock %}
 
 {% block content %}
+<p id="applianceID" style="display: none">{{appliance.pk}}</p>
 <body class="text-center">
 <form class="form" method="POST">
     {% csrf_token %}
@@ -24,19 +25,14 @@ Booking
     <button class="btn btn-lg btn-primary btn-block" type="submit">Book</button>
 </form>
 
-<ul id="bookingList"></ul>
-
-<div id="experimentalList">
-    <table>
-        <tr>
-            <td>Date</td>
-            <td>Time From</td>
-            <td>Time To</td>
-        </tr>
-    </table>
-</div>
-</body>
-
-
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Bookings</th>
+    </tr>
+    </thead>
+    <tbody id="tableBodyForInsertion">
+    </tbody>
+</table>
 
 {% endblock %}

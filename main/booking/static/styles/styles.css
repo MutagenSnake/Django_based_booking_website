@@ -1,3 +1,19 @@
 .alert {
     margin-bottom: 0
 }
+
+.wrapper {
+  position: relative;
+}
+
+#bottom {
+  top: 0;
+  left: 0;
+  background-color: blue;
+}
+
+#top {
+  top: 0;
+  left: 0;
+  background-color: red;
+}
