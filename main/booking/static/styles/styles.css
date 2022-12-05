@@ -17,3 +17,58 @@
   left: 0;
   background-color: red;
 }
+
+#calendarDiv {
+  display: flex;
+  margin-top: 50px;
+  justify-content: center;
+}
+
+#calendar {
+  width: 100%;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#containerCalendar {
+  width: 770px;
+}
+
+#headerCalendar {
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+#weekdays {
+  width: 100%;
+  display: flex;
+  color: #0d6efd;
+}
+
+#weekdays .weekday {
+  width: 100px;
+  padding: 10px;
+  margin: 5px;
+  font-weight: bold;
+}
+
+.day {
+  width: 100px;
+  padding: 10px;
+  height: 100px;
+  cursor: pointer;
+  box-sizing: border-box;
+  background-color: white;
+  margin: 5px;
+  box-shadow: 0px 0px 3px #CBD4C2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#monthDisplay {
+    font-weight: bold;
+    font-size: 30px;
+}
