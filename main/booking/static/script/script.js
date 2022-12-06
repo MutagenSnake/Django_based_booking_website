@@ -37,7 +37,6 @@ function getApplianceDays (allBookings) {
     for (let i = 0; i < allBookings.length; i++) {
 //        console.log(bookings[i]['appliance'])
         if (allBookings[i]['appliance'] == applianceID) {
-            console.log(allBookings[i])
             // Get dates in date format
             let dateIsoStart= allBookings[i]['day_from'];
             let dateIsoEnd= allBookings[i]['day_to'];
@@ -68,8 +67,6 @@ function getApplianceDays (allBookings) {
 
 
 let nav = 0;
-let clicked = null;
-let events = localStorage.getItem('events') ? JSON.parse(localStorage.getItem('events')) : [];
 
 const calendar = document.getElementById('calendar');
 const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
