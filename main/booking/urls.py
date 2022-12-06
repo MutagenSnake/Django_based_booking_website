@@ -7,5 +7,6 @@ urlpatterns =[
     path('register/', views.register, name='register'),
     path('booking/<int:appliance_id>', views.booking, name='booking'),
     path('search/', views.search, name='search'),
+    path('profile/', views.profile, name='profile'),
     path('bookingapi', views.Bookinglist.as_view()),
 ]

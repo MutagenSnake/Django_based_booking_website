@@ -1,18 +1,13 @@
-import datetime
-from django.shortcuts import render
 from rest_framework import generics
 from .serializers import BookingSerializer
-from django.shortcuts import render, redirect
-from .models import Appliance, Booking, ApplianceType
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import UserCreationForm
-from django.shortcuts import render, get_object_or_404
+from .models import Appliance, Booking
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.forms import UserCreationForm, User
+from django.shortcuts import render
 from .forms import BookingForm
 from django.shortcuts import redirect
-from django.contrib.auth.forms import User
 from django.views.decorators.csrf import csrf_protect
 from django.contrib import messages
-import re
 from .functions import form_to_datetime, overlap_checker, past_checker, json_serial
 from django.core.paginator import Paginator
 from django.db.models import Q
@@ -32,6 +27,7 @@ def equipment(request):
     }
     return render(request, template_name='equipment.html', context=context)
 
+@csrf_protect
 def register(request):
     if request.method == 'GET':
         return render(request, template_name='registration/register.html')
@@ -39,13 +35,26 @@ def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            form.save()
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=password)
-            login(request, user)
-            return redirect('home')
+            password2 = form.cleaned_data.get('password1')
+            email = form.cleaned_data.get('email')
+            if password == password2:
+                if User.objects.filter(username=username).exists():
+                    messages.error(request, f'{username} is taken')
+                    return redirect('register')
+                else:
+                    if User.objects.filter(email=email).exists():
+                        messages.error(request, f'{email} is taken')
+                        return redirect('register')
+                    else:
+                        User.objects.create_user(username=username, email=email, password=password)
+                        messages.info(request, f'{username} registration successful!')
+                        user = authenticate(username=username, password=password)
+                        login(request, user)
+                        return redirect('home')
         else:
+            messages.error(request, f'Invalid Form {form.errors.as_data()}')
             return redirect('register')
 
 @csrf_protect
@@ -71,17 +80,24 @@ def booking(request, appliance_id):
                     messages.error(request, 'The booking time overlaps with other booking')
                     return render(request, template_name='bookingpage.html', context=context)
 
-                elif past_checker(datetime_from) == True:
-                    messages.error(request, 'The booking time already have passed')
+                elif (datetime_from > datetime_to):
+                    messages.error(request, 'Mixed up past and future!')
                     return render(request, template_name='bookingpage.html', context=context)
 
                 else:
-                    messages.success(request, 'Booked successfully')
-                    Booking.objects.create(appliance=appliance, day_from=datetime_from, day_to=datetime_to, user=request.user)
-                    return render(request, template_name='bookingpage.html', context=context)
+                    continue
+
+            if past_checker(datetime_from) == True:
+                messages.error(request, 'The booking time already have passed')
+                return render(request, template_name='bookingpage.html', context=context)
+
+            else:
+                messages.success(request, 'Booked successfully')
+                Booking.objects.create(appliance=appliance, day_from=datetime_from, day_to=datetime_to, user=request.user)
+                return render(request, template_name='bookingpage.html', context=context)
 
         else:
-            messages.success(request, 'Booked successfully')
+            messages.success(request, 'Booked successfully, first booking!')
             Booking.objects.create(appliance=appliance, day_from=datetime_from, day_to=datetime_to, user=request.user)
             return render(request, template_name='bookingpage.html', context=context)
 
@@ -109,3 +125,6 @@ def search(request):
 class Bookinglist(generics.ListAPIView):
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
+
+def profile(request):
+    return render(request, template_name='profile.html')

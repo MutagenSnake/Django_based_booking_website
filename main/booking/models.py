@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class ApplianceType(models.Model):
+    '''Model Representing appliance type'''
     type = models.CharField(max_length=50, help_text='Type of the appliance')
 
     class Meta:

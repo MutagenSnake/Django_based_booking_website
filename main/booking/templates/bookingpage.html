@@ -9,7 +9,7 @@ Booking
 <body class="text-center">
 <form class="form" method="POST">
     {% csrf_token %}
-    <img class="mb-4" src="https://1000logos.net/wp-content/uploads/2022/06/Logo-Mitsubishi.png" height="150">
+    <img class="mb-4" src="{{appliance.image_url}}" height="150">
     <h1 class="h3 mb-3 font-weight-normal">
         Booking Form for {{appliance.title}}
     </h1>
@@ -25,15 +25,6 @@ Booking
     <button class="btn btn-lg btn-primary btn-block" type="submit">Book</button>
 </form>
 
-<table class="table">
-    <thead>
-    <tr>
-        <th scope="col">Bookings</th>
-    </tr>
-    </thead>
-    <tbody id="tableBodyForInsertion">
-    </tbody>
-</table>
 
 <div id="calendarDiv">
     <div id="containerCalendar">
@@ -58,5 +49,14 @@ Booking
     </div>
 </div>
 
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Bookings</th>
+    </tr>
+    </thead>
+    <tbody id="tableBodyForInsertion">
+    </tbody>
+</table>
 
 {% endblock %}

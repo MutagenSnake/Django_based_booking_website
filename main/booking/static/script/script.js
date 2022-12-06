@@ -19,56 +19,17 @@ async function listDates() {
     const bookingData = await getData()
         for (let i = 0; i < bookingData.length; i++) {
             if (bookingData[i]['appliance'] == applianceID) {
+                dayFrom = bookingData[i]['day_from']
+                dayTo = bookingData[i]['day_to']
                 const paragraph = document.createElement("tr");
-                paragraph.innerHTML = `<tr><th scope="row">Time From: ${bookingData[i]['day_from']} Time To: ${bookingData[i]['day_to']}</th></tr>`;
+                paragraph.innerHTML = `<tr><th scope="row">Time From: ${dayFrom} Time To: ${dayTo}</th></tr>`;
                 document.getElementById("tableBodyForInsertion").appendChild(paragraph);}
         }}
 
 getData()
 listDates()
 
-//allBookings = getData()
-
-//console.log(allBookings)
-
-
-
 // Script for calendar
-
-bookings = [
-    {
-        "id": 7,
-        "appliance": 1,
-        "day_from": "2022-11-01T21:16:00Z",
-        "day_to": "2022-11-15T21:16:00Z",
-        "user": 1
-    },
-    {
-        "id": 8,
-        "appliance": 1,
-        "day_from": "2022-11-04T21:16:00Z",
-        "day_to": "2022-11-21T21:16:00Z",
-        "user": 1
-    },
-    {
-        "id": 9,
-        "appliance": 2,
-        "day_from": "2022-12-01T21:16:00Z",
-        "day_to": "2022-12-10T21:16:00Z",
-        "user": 1
-    },
-    {
-        "id": 10,
-        "appliance": 2,
-        "day_from": "2022-11-02T21:17:00Z",
-        "day_to": "2022-11-19T21:17:00Z",
-        "user": 1
-    }
-]
-
-// get booking data
-console.log(bookings)
-
 
 // function returning list of booked days
 function getApplianceDays (allBookings) {
@@ -153,7 +114,8 @@ async function load() {
             daySquare.innerText = i - paddingDays;
 
             if (workingDayStringList.includes(dayString)) {
-                daySquare.innerText = 'Booked'
+                daySquare.innerHTML = `${i - paddingDays}<br>Booked`
+                daySquare.style.boxShadow = "0px 0px 3px red";
             }
 
             daySquare.addEventListener('click', () => console.log(`${month+1}/${i - paddingDays}/${year}`));
