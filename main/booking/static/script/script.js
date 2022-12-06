@@ -27,6 +27,12 @@ async function listDates() {
 getData()
 listDates()
 
+//allBookings = getData()
+
+//console.log(allBookings)
+
+
+
 // Script for calendar
 
 bookings = [
@@ -59,26 +65,43 @@ bookings = [
         "user": 1
     }
 ]
+
 // get booking data
 console.log(bookings)
 
-for (let i = 0; i < bookings.length; i++) {
-    // Get dates in date format
-    let dateIsoStart= bookings[i]['day_from'];
-    let dateIsoEnd= bookings[i]['day_to'];
-    const dateStart = new Date(dateIsoStart);
-    const dateEnd = new Date(dateIsoEnd);
-    // Get days within
-    let difference = dateEnd.getTime() - dateStart.getTime();
-    let totalDays = Math.ceil(difference / (1000 * 3600 * 24));
-    let dateList = [];
-    for (let i = 0; i < totalDays; i++) {
-        let workingDate = dateStart;
-        workingDate.setDate(workingDate.getDate() + i);
-        console.log(workingDate)
-        dateList.push(workingDate);
+
+// function returning list of booked days
+function getApplianceDays (allBookings) {
+    workingDayStringList = [];
+    for (let i = 0; i < allBookings.length; i++) {
+//        console.log(bookings[i]['appliance'])
+        if (allBookings[i]['appliance'] == applianceID) {
+            console.log(allBookings[i])
+            // Get dates in date format
+            let dateIsoStart= allBookings[i]['day_from'];
+            let dateIsoEnd= allBookings[i]['day_to'];
+            const dateStart = new Date(dateIsoStart);
+            const dateEnd = new Date(dateIsoEnd);
+            // Get days within
+            let difference = dateEnd.getTime() - dateStart.getTime();
+            let totalDays = Math.ceil(difference / (1000 * 3600 * 24));
+            let dateList = [];
+            for (let i = 0; i < totalDays+1; i++) {
+                let workingDate = new Date(dateIsoStart);
+                workingDate.setDate(workingDate.getDate() + i);
+                dateList.push(workingDate);
+                }
+
+            for (let i = 0; i < dateList.length; i++) {
+                const day = dateList[i].getDate();
+                const month = dateList[i].getMonth();
+                const year = dateList[i].getFullYear();
+
+//                console.log(`${month+1}/${day}/${year}`)
+                workingDayStringList.push(`${month+1}/${day}/${year}`)
+            }}
         }
-    console.log(dateList)
+        return workingDayStringList
 }
 
 
@@ -90,7 +113,7 @@ let events = localStorage.getItem('events') ? JSON.parse(localStorage.getItem('e
 const calendar = document.getElementById('calendar');
 const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-function load() {
+async function load() {
     const dt = new Date();
 
     if (nav !== 0) {
@@ -116,6 +139,10 @@ function load() {
 
     calendar.innerHTML = '';
 
+    const bookingData = await getData()
+
+    const workingDayStringList = getApplianceDays(bookingData);
+
     for(let i = 1; i <= paddingDays + daysInMonth; i++) {
         const daySquare = document.createElement('div');
         daySquare.classList.add('day');
@@ -124,6 +151,11 @@ function load() {
 
         if (i > paddingDays) {
             daySquare.innerText = i - paddingDays;
+
+            if (workingDayStringList.includes(dayString)) {
+                daySquare.innerText = 'Booked'
+            }
+
             daySquare.addEventListener('click', () => console.log(`${month+1}/${i - paddingDays}/${year}`));
         }
         else {
@@ -147,7 +179,7 @@ function initButtons() {
 
 };
 
+
+
 initButtons();
 load();
-
-
